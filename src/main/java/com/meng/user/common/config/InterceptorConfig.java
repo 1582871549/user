@@ -1,6 +1,6 @@
-package com.meng.user.common;
+package com.meng.user.common.config;
 
-import com.meng.user.web.interceptor.TokenInterceptor;
+import com.meng.user.common.interceptor.TokenInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -14,7 +14,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/login/login")
+                .excludePathPatterns("/home/login")
+                .excludePathPatterns("/home/register");
 
         ;
     }
@@ -36,5 +37,15 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public TokenInterceptor tokenInterceptor() {
         return new TokenInterceptor();
     }
+
+    // 跨域配置
+    // @Override
+    // public void addCorsMappings(CorsRegistry registry) {
+    //     registry.addMapping("/**")//设置允许跨域的路径
+    //             .allowedOrigins("*")//设置允许跨域请求的域名
+    //             .allowCredentials(true)//是否允许证书 不再默认开启
+    //             .allowedMethods("GET", "POST", "PUT", "DELETE")//设置允许的方法
+    //             .maxAge(3600);//跨域允许时间
+    // }
 
 }

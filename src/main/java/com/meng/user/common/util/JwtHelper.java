@@ -18,17 +18,16 @@ import java.util.Map;
  * @author dujianwei
  * @create 2020-07-06
  */
-public class JwtUtil {
+public class JwtHelper {
 
     /**
      * 过期时间一天，
      * TODO 正式运行时修改为15分钟
      */
     private static final long EXPIRE_TIME = 24 * 60 * 60 * 1000;
-    /**
-     * token私钥
-     */
-    private static final String TOKEN_SECRET = "f26e587c28064d0e855e72c0a6a0e618";
+
+    // 15分钟
+    // private static final long EXPIRE_TIME = 15 * 60 * 1000;
 
     /**
      * 校验token是否正确
@@ -36,11 +35,12 @@ public class JwtUtil {
      * @param token 密钥
      * @return 是否正确
      */
-    public static boolean verify(String token) {
+    public static boolean verify(String token, String password) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
-            JWTVerifier verifier = JWT.require(algorithm)
-                    .build();
+            Algorithm algorithm = Algorithm.HMAC256(password);
+
+            JWTVerifier verifier = JWT.require(algorithm).build();
+
             DecodedJWT jwt = verifier.verify(token);
             return true;
         } catch (Exception exception) {
@@ -56,7 +56,7 @@ public class JwtUtil {
     public static String getUsername(String token) {
         try {
             DecodedJWT jwt = JWT.decode(token);
-            return jwt.getClaim("loginName").asString();
+            return jwt.getClaim("username").asString();
         } catch (JWTDecodeException e) {
             return null;
         }
@@ -96,13 +96,15 @@ public class JwtUtil {
             header.put("typ", "JWT");
             header.put("alg", "HS256");
 
+            Algorithm algorithm = Algorithm.HMAC256(user.getPassword());
+
             // 附带username，userId信息，生成签名
             return JWT.create()
                     .withHeader(header)
                     .withClaim("username", user.getUsername())
                     .withClaim("userId", user.getUserId())
                     .withExpiresAt(date)
-                    .sign(Algorithm.HMAC256(user.getPassword()));
+                    .sign(algorithm);
         } catch (UnsupportedEncodingException e) {
             return null;
         }

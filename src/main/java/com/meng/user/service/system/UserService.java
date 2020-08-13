@@ -1,4 +1,4 @@
-package com.meng.user.service;
+package com.meng.user.service.system;
 
 import com.meng.user.repository.system.entity.User;
 
@@ -97,7 +97,8 @@ public interface UserService {
      */
     boolean remove(User entity);
 
-    boolean checkUser(User entity);
-
     User getUserByUserame(String username);
+
+    String login(User userReq);
+
 }

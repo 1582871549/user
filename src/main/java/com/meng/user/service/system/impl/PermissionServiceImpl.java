@@ -1,8 +1,8 @@
-package com.meng.user.service.impl;
+package com.meng.user.service.system.impl;
 
 import com.meng.user.repository.system.entity.Permission;
 import com.meng.user.repository.system.mapper.PermissionMapper;
-import com.meng.user.service.PermissionService;
+import com.meng.user.service.system.PermissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

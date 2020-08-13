@@ -1,8 +1,9 @@
-package com.meng.user.web.controller;
+package com.meng.user.web.system.controller;
 
-import com.meng.user.common.util.ApiResponseUtil;
-import com.meng.user.service.UserService;
-import com.meng.user.web.entity.ApiResponse;
+import com.meng.user.common.base.Result;
+import com.meng.user.common.util.ResultUtil;
+import com.meng.user.repository.system.entity.User;
+import com.meng.user.service.system.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,8 +23,11 @@ public class UserController {
     private final UserService userService;
 
     @RequestMapping(value = "/countUser", method = RequestMethod.GET)
-    public ApiResponse getUser() {
-        return ApiResponseUtil.getApiResponse(userService.getUserByUserame(""));
+    public Result<User> getUser() {
+
+        User user = userService.getUserByUserame("");
+
+        return ResultUtil.success(user);
     }
 }
 

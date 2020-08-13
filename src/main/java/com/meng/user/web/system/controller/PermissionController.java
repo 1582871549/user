@@ -1,6 +1,6 @@
-package com.meng.user.web.controller;
+package com.meng.user.web.system.controller;
 
-import com.meng.user.service.PermissionService;
+import com.meng.user.service.system.PermissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

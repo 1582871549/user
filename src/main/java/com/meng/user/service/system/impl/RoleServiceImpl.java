@@ -1,7 +1,7 @@
-package com.meng.user.service.impl;
+package com.meng.user.service.system.impl;
 
 import com.meng.user.repository.system.entity.Role;
-import com.meng.user.service.RoleService;
+import com.meng.user.service.system.RoleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

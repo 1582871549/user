@@ -1,4 +1,4 @@
-package com.meng.user.service;
+package com.meng.user.service.system;
 
 import com.meng.user.repository.system.entity.Permission;
 
