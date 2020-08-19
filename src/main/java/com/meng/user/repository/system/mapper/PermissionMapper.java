@@ -1,21 +1,19 @@
 package com.meng.user.repository.system.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.meng.user.repository.system.entity.PermissionDO;
 import org.springframework.stereotype.Repository;
 
-/**
- * 资源 Mapper 接口
- *
- * @author mengli
- * @create 2020-07-04
- */
+import java.util.List;
+
 @Repository
-public interface PermissionMapper {
+public interface PermissionMapper extends BaseMapper<PermissionDO> {
 
     /**
-     * 查询总记录数
+     * 查询资源集合
      *
-     * @return count
+     * @param roleId 角色id
+     * @return 权限资源
      */
-    int countPermission();
+    List<PermissionDO> listPermissions(Long roleId);
 }
-

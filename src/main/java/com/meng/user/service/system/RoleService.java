@@ -1,100 +1,96 @@
 package com.meng.user.service.system;
 
-import com.meng.user.repository.system.entity.Role;
+import com.meng.user.service.system.entity.dto.RoleDTO;
 
 import java.util.List;
+import java.util.Set;
 
-/**
- * 角色 服务类
- *
- * @author mengli
- * @create 2020-07-04
- */
 public interface RoleService {
 
     /**
-     * 查询总记录数
+     * 添加角色-权限之间关系
      *
-     * @return 总记录数
+     * @param roleId 角色id
+     * @param permissionIds 权限ids
      */
-    int countRole();
+    void addCorrelationPermissions(Long roleId, Long... permissionIds);
 
     /**
-     * 查询单条记录
+     * 移除角色-权限之间关系
      *
-     * @param id 主键
-     * @return 实体
+     * @param roleId 角色id
+     * @param permissionIds 权限ids
      */
-    Role getRoleById(Long id);
+    void removeCorrelationPermissions(Long roleId, Long... permissionIds);
 
     /**
-     * 查询集合
+     * 查询单个角色
      *
-     * @return 集合
+     * @param roleId 主键
+     * @return 角色
      */
-    List<Role> listRoles();
+    RoleDTO getRole(Long roleId);
 
     /**
-     * 根据 entity 条件，查询集合
+     * 查询单个角色
      *
-     * @param entity 实体条件对象
-     * @return 集合
+     * @param roleName 角色名称
+     * @return 角色
      */
-    List<Role> listRoles(Role entity);
+    RoleDTO getRole(String roleName);
+
+    /**
+     * 查询角色集合
+     *
+     * @return 角色集合
+     */
+    List<RoleDTO> listRoles();
+
+    /**
+     * 查询角色集合
+     *
+     * @param userId 用户id
+     * @return 角色集合
+     */
+    List<RoleDTO> listRoles(Long userId);
+
+    /**
+     * 查询角色集合
+     *
+     * @param userId 用户id
+     * @return 角色集合
+     */
+    Set<String> listRoleNames(Long userId);
 
     /**
      * 插入一条记录
      *
-     * @param entity 实体对象
+     * @param roleDTO 实体对象
      * @return 逻辑值
      */
-    boolean saveRole(Role entity);
+    boolean saveRole(RoleDTO roleDTO);
 
     /**
-     * 批量插入
+     * 主键存在则更新记录，否则插入一条记录
      *
-     * @param entityList 实体对象集合
-     * @param batchSize  插入数量
+     * @param roleDTO 实体对象
+     * @return 逻辑值
      */
-    boolean saveBatch(List<Role> entityList, int batchSize);
+    boolean saveOrUpdateRole(RoleDTO roleDTO);
 
     /**
      * 修改一条记录
      *
-     * @param entity 实体对象
+     * @param roleDTO 实体对象
      * @return 逻辑值
      */
-    boolean updateRoleById(Role entity);
-
-    /**
-     * 根据 entity 条件，修改记录
-     *
-     * @param entity 实体条件对象
-     * @return 逻辑值
-     */
-    boolean updateRole(Role entity);
-
-    /**
-     * 批量修改
-     *
-     * @param entityList 实体对象集合
-     * @param batchSize  修改数量
-     */
-    boolean updateBatch(List<Role> entityList, int batchSize);
+    boolean updateRole(RoleDTO roleDTO);
 
     /**
      * 删除一条记录
      *
-     * @param id 主键
+     * @param roleId 主键
      * @return 逻辑值
      */
-    boolean removeRoleById(Long id);
-
-    /**
-     * 根据 entity 条件，删除记录
-     *
-     * @param entity 实体条件对象
-     */
-    boolean remove(Role entity);
-
+    boolean deleteRole(Long roleId);
 }

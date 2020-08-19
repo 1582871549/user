@@ -1,32 +1,9 @@
 package com.meng.user.common.base;
 
-import java.io.Serializable;
+public class Result<T> extends ResultBase {
 
-public class Result<T> implements Serializable {
-
-    private static final long serialVersionUID = -4995369157879021000L;
-
-    private String code;
-    private String message;
+    private static final long serialVersionUID = 2613006242860927638L;
     private T data;
-
-    public String getCode() {
-        return code;
-    }
-
-    public Result<T> code(String code) {
-        this.code = code;
-        return this;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public Result<T> message(String message) {
-        this.message = message;
-        return this;
-    }
 
     public T getData() {
         return data;
@@ -35,5 +12,12 @@ public class Result<T> implements Serializable {
     public Result<T> data(T data) {
         this.data = data;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Result{" +
+                "data=" + data +
+                "} " + super.toString();
     }
 }

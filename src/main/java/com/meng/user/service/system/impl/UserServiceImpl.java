@@ -1,115 +1,142 @@
 package com.meng.user.service.system.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.meng.user.common.util.BeanCopyUtil;
 import com.meng.user.common.util.JwtHelper;
-import com.meng.user.repository.system.entity.User;
+import com.meng.user.common.util.ResultUtil;
+import com.meng.user.common.util.ShiroUtil;
+import com.meng.user.repository.system.entity.UserDO;
 import com.meng.user.repository.system.mapper.UserMapper;
 import com.meng.user.service.system.UserService;
+import com.meng.user.service.system.entity.dto.UserDTO;
+import com.meng.user.web.system.entity.request.UserReq;
 import lombok.RequiredArgsConstructor;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
- * 用户 服务实现类
- *
- * @author mengli
- * @create 2020-07-04
+ * @author 大橙子
+ * @create 2019/8/8
+ * @since 1.0.0
  */
+@Transactional(transactionManager = "dataSourceTransactionManager", rollbackFor = Exception.class)
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
 
-    @Override
-    public int countUser() {
-        return 0;
+    public boolean updatePassword(UserDTO userDTO) {
+
+        String salt = ShiroUtil.getRandomSalt(16);
+        String hashPassword = encryptionPassword(userDTO.getPassword(), salt);
+
+        UserDO userDO = BeanCopyUtil.copy(userDTO, UserDO.class);
+
+        userDO.setSalt(salt);
+        userDO.setPassword(hashPassword);
+
+        return ResultUtil.returnBool(userMapper.updatePassword(userDO));
     }
 
     @Override
-    public User getUserById(Long id) {
-        return null;
+    public void addCorrelationRoles(Long userId, Long... roleIds) {
+        userMapper.addCorrelationRoles(userId, roleIds);
     }
 
     @Override
-    public List<User> listUsers() {
-        return null;
+    public void removeCorrelationRoles(Long userId, Long... roleIds) {
+        userMapper.removeCorrelationRoles(userId, roleIds);
     }
 
     @Override
-    public List<User> listUsers(User entity) {
-        return null;
+    public String login(UserReq userReq) {
+
+        String username = userReq.getUsername();
+        String password = userReq.getPassword();
+
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+
+        Subject currentUser = SecurityUtils.getSubject();
+
+        currentUser.login(token);
+
+        UserDTO userDTO = getUserByUsername(username);
+
+        return JwtHelper.sign(userDTO);
     }
 
     @Override
-    public boolean saveUser(User entity) {
-        return false;
+    public UserDTO getUser(Long userId) {
+        UserDO userDO = userMapper.selectById(userId);
+        return BeanCopyUtil.copy(userDO, UserDTO.class);
     }
 
     @Override
-    public boolean saveBatch(List<User> entityList, int batchSize) {
-        return false;
+    public UserDTO getUserByUsername(String username) {
+        UserDO userDO = userMapper.selectOne(new QueryWrapper<UserDO>().eq("username", username));
+        return BeanCopyUtil.copy(userDO, UserDTO.class);
     }
 
     @Override
-    public boolean updateUserById(User entity) {
-        return false;
+    public List<UserDTO> listUsers(Page<UserDO> page) {
+
+        IPage<UserDO> iPage = userMapper.selectPage(page, null);
+
+        List<UserDO> records = iPage.getRecords();
+
+        return BeanCopyUtil.copyList(records, UserDTO.class);
     }
 
     @Override
-    public boolean updateUser(User entity) {
-        return false;
+    public boolean saveUser(UserDTO userDTO) {
+
+        UserDO userDO = BeanCopyUtil.copy(userDTO, UserDO.class);
+
+        String salt = ShiroUtil.getRandomSalt(16);
+        String hashPassword = encryptionPassword(userDO.getPassword(), salt);
+
+        userDO.setSalt(salt);
+        userDO.setPassword(hashPassword);
+
+        return ResultUtil.returnBool(userMapper.insert(userDO));
     }
 
     @Override
-    public boolean updateBatch(List<User> entityList, int batchSize) {
-        return false;
-    }
-
-    @Override
-    public boolean removeUserById(Long id) {
-        return false;
-    }
-
-    @Override
-    public boolean remove(User entity) {
-        return false;
-    }
-
-    @Override
-    public User getUserByUserame(String username) {
-
-        User user = new User()
-                .setUserId(201L)
-                .setUsername(username)
-                .setPassword("123")
-                .setNickname("dudu")
-                .setMobile("135");
-
-        return user;
-    }
-
-    @Override
-    public String login(User user) {
-
-        User user1 = getUserByUserame(user.getUsername());
-
-        // 身份验证是否成功
-        if (user1 == null) {
-            throw new RuntimeException("用户不存在");
+    public boolean saveOrUpdateUser(UserDTO userDTO) {
+        if (userDTO == null) {
+            return false;
         }
+        Long userId = userDTO.getUserId();
+        return userId == null || getUser(userId) == null ? saveUser(userDTO) : updateUser(userDTO);
+    }
 
-        String webPassword = user.getPassword();
-        String dbPassword = user1.getPassword();
+    @Override
+    public boolean updateUser(UserDTO userDTO) {
+        UserDO userDO = BeanCopyUtil.copy(userDTO, UserDO.class);
+        return ResultUtil.returnBool(userMapper.updateById(userDO));
+    }
 
-        // 使用密码加密类将web密码加密, 然后与数据库密码对比
+    @Override
+    public boolean deleteUser(Long userId) {
+        return ResultUtil.returnBool(userMapper.deleteById(userId));
+    }
 
-        boolean equals = dbPassword.equals(webPassword);
-
-        if (equals) {
-            return JwtHelper.sign(user1);
-        }
-
-        throw new RuntimeException("密码不正确");
+    /**
+     * 使用加密算法对密码进行加密
+     *
+     * @param password 密码
+     * @param salt 盐
+     * @return 加密后的密码
+     */
+    public String encryptionPassword(String password, String salt) {
+        return ShiroUtil.sha256(password, salt);
     }
 }

@@ -3,8 +3,8 @@ package com.meng.user.common.interceptor;
 import com.meng.user.common.annotation.PassToken;
 import com.meng.user.common.annotation.UserLoginToken;
 import com.meng.user.common.util.JwtHelper;
-import com.meng.user.repository.system.entity.User;
 import com.meng.user.service.system.UserService;
+import com.meng.user.service.system.entity.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +74,7 @@ public class TokenInterceptor implements HandlerInterceptor {
 
             String username = JwtHelper.getUsername(token);
 
-            User user = userService.getUserByUserame(username);
+            UserDTO user = userService.getUserByUsername(username);
 
             if (user == null) {
                 log.info("用户不存在，请重新登录");

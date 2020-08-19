@@ -1,19 +1,23 @@
 package com.meng.user.service.system.impl;
 
-import com.meng.user.repository.system.entity.Permission;
+import com.meng.user.common.util.BeanCopyUtil;
+import com.meng.user.common.util.ResultUtil;
+import com.meng.user.repository.system.entity.PermissionDO;
 import com.meng.user.repository.system.mapper.PermissionMapper;
 import com.meng.user.service.system.PermissionService;
+import com.meng.user.service.system.entity.dto.PermissionDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
- * 资源 服务实现类
- *
  * @author mengli
- * @create 2020-07-04
+ * @create 2019/12/24
+ * @since 1.0.0
  */
+@Transactional(transactionManager = "dataSourceTransactionManager", rollbackFor = Exception.class)
 @Service
 @RequiredArgsConstructor
 public class PermissionServiceImpl implements PermissionService {
@@ -21,57 +25,50 @@ public class PermissionServiceImpl implements PermissionService {
     private final PermissionMapper permissionMapper;
 
     @Override
-    public int countPermission() {
-        return permissionMapper.countPermission();
-    }
+    public PermissionDTO getPermission(Long permissionId) {
 
-    @Override
-    public Permission getPermissionById(Long id) {
+        PermissionDO permissionDO = permissionMapper.selectById(permissionId);
+
         return null;
     }
 
     @Override
-    public List<Permission> listPermissions() {
+    public List<PermissionDTO> listPermissions() {
+
+        List<PermissionDO> permissionDOS = permissionMapper.selectList(null);
+
         return null;
     }
 
     @Override
-    public List<Permission> listPermissions(Permission entity) {
-        return null;
+    public List<PermissionDTO> listPermissions(Long roleId) {
+        List<PermissionDO> permissionDOS = permissionMapper.listPermissions(roleId);
+        return BeanCopyUtil.copyList(permissionDOS, PermissionDTO.class);
     }
 
     @Override
-    public boolean savePermission(Permission entity) {
-        return false;
+    public boolean savePermission(PermissionDTO permissionDTO) {
+        return ResultUtil.returnBool(permissionMapper.insert(null));
     }
 
     @Override
-    public boolean saveBatch(List<Permission> entityList, int batchSize) {
-        return false;
+    public boolean saveOrUpdatePermission(PermissionDTO permissionDTO) {
+
+        if (permissionDTO == null) {
+            return false;
+        }
+        Long permissionId = permissionDTO.getPermissionId();
+
+        return permissionId == null || getPermission(permissionId) == null ? savePermission(permissionDTO) : updatePermission(permissionDTO);
     }
 
     @Override
-    public boolean updatePermissionById(Permission entity) {
-        return false;
+    public boolean updatePermission(PermissionDTO permissionDTO) {
+        return ResultUtil.returnBool(permissionMapper.updateById(null));
     }
 
     @Override
-    public boolean updatePermission(Permission entity) {
-        return false;
-    }
-
-    @Override
-    public boolean updateBatch(List<Permission> entityList, int batchSize) {
-        return false;
-    }
-
-    @Override
-    public boolean removePermissionById(Long id) {
-        return false;
-    }
-
-    @Override
-    public boolean remove(Permission entity) {
-        return false;
+    public boolean deletePermission(Long permissionId) {
+        return ResultUtil.returnBool(permissionMapper.deleteById(permissionId));
     }
 }

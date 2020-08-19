@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meng.user.repository.system.mapper.RoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.meng.user.repository.system.entity.RoleDO">
+        <id column="role_id" property="roleId" />
+        <result column="role_name" property="roleName" />
+        <result column="description" property="description" />
+        <result column="is_activation" property="activation" />
+        <result column="create_time" property="createTime" />
+        <result column="modified_time" property="modifiedTime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        role_id,
+        role_name,
+        description,
+        is_activation,
+        create_time,
+        modified_time
+    </sql>
+
+    <sql id="T1_Column_List">
+        t1.role_id,
+        t1.role_name,
+        t1.description,
+        t1.is_activation,
+        t1.create_time,
+        t1.modified_time
+    </sql>
+
+    <select id="listRoles" resultMap="BaseResultMap" parameterType="long">
+        SELECT
+            <include refid="T1_Column_List"/>
+        FROM
+            sys_role as t1 LEFT JOIN
+            sys_user_role as t2 on t1.role_id = t2.role_id
+        WHERE
+            t2.user_id = #{userId}
+    </select>
+
+</mapper>

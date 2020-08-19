@@ -5,7 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.meng.user.repository.system.entity.User;
+import com.meng.user.service.system.entity.dto.UserDTO;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -86,7 +86,7 @@ public class JwtHelper {
      * @param user 用户
      * @return 加密的token
      */
-    public static String sign(User user) {
+    public static String sign(UserDTO user) {
         try {
             // 过期时间
             Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);

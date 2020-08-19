@@ -1,10 +1,11 @@
 package com.meng.user.web.system.controller;
 
 import com.meng.user.common.annotation.UserLoginToken;
-import com.meng.user.common.base.Result;
+import com.meng.user.common.base.ResultBase;
 import com.meng.user.common.util.ResultUtil;
-import com.meng.user.repository.system.entity.User;
 import com.meng.user.service.system.UserService;
+import com.meng.user.service.system.entity.dto.UserDTO;
+import com.meng.user.web.system.entity.request.UserReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +28,9 @@ public class LoginController {
     @UserLoginToken
     @RequestMapping(value = "/countUser", method = RequestMethod.GET)
     public int countUser() {
-        return userService.countUser();
+        // return userService.countUser();
+        return 0;
     }
-
 
     /**
      * 登陆接口
@@ -37,11 +38,24 @@ public class LoginController {
      * @return token
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Result<String> login(@RequestBody User userReq) {
+    public ResultBase login(@RequestBody UserReq userReq) {
 
         String token = userService.login(userReq);
 
         return ResultUtil.success(token);
+    }
+
+    /**
+     * 登陆接口
+     *
+     * @return token
+     */
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResultBase register(@RequestBody UserDTO userDTO) {
+
+        userService.saveUser(userDTO);
+
+        return ResultUtil.success();
     }
 
 }

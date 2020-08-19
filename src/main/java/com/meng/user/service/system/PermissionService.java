@@ -1,100 +1,64 @@
 package com.meng.user.service.system;
 
-import com.meng.user.repository.system.entity.Permission;
+import com.meng.user.service.system.entity.dto.PermissionDTO;
 
 import java.util.List;
 
-/**
- * 资源 服务类
- *
- * @author mengli
- * @create 2020-07-04
- */
 public interface PermissionService {
 
     /**
-     * 查询总记录数
+     * 查询单个资源
      *
-     * @return 总记录数
+     * @param permissionId 主键
+     * @return 资源
      */
-    int countPermission();
+    PermissionDTO getPermission(Long permissionId);
 
     /**
-     * 查询单条记录
+     * 查询资源集合
      *
-     * @param id 主键
-     * @return 实体
+     * @return 资源集合
      */
-    Permission getPermissionById(Long id);
+    List<PermissionDTO> listPermissions();
 
     /**
-     * 查询集合
+     * 查询资源集合
      *
-     * @return 集合
-     */
-    List<Permission> listPermissions();
-
-    /**
-     * 根据 entity 条件，查询集合
+     * @param roleId 角色id
      *
-     * @param entity 实体条件对象
-     * @return 集合
+     * @return 资源集合
      */
-    List<Permission> listPermissions(Permission entity);
+    List<PermissionDTO> listPermissions(Long roleId);
 
     /**
      * 插入一条记录
      *
-     * @param entity 实体对象
+     * @param permissionDTO 实体对象
      * @return 逻辑值
      */
-    boolean savePermission(Permission entity);
+    boolean savePermission(PermissionDTO permissionDTO);
 
     /**
-     * 批量插入
+     * 主键存在则更新记录，否则插入一条记录
      *
-     * @param entityList 实体对象集合
-     * @param batchSize 插入数量
+     * @param permissionDTO 实体对象
+     * @return 逻辑值
      */
-    boolean saveBatch(List<Permission> entityList, int batchSize);
+    boolean saveOrUpdatePermission(PermissionDTO permissionDTO);
 
     /**
      * 修改一条记录
      *
-     * @param entity 实体对象
+     * @param permissionDTO 实体对象
      * @return 逻辑值
      */
-    boolean updatePermissionById(Permission entity);
-
-    /**
-     * 根据 entity 条件，修改记录
-     *
-     * @param entity 实体条件对象
-     * @return 逻辑值
-     */
-    boolean updatePermission(Permission entity);
-
-    /**
-     * 批量修改
-     *
-     * @param entityList 实体对象集合
-     * @param batchSize 修改数量
-     */
-    boolean updateBatch(List<Permission> entityList, int batchSize);
+    boolean updatePermission(PermissionDTO permissionDTO);
 
     /**
      * 删除一条记录
      *
-     * @param id 主键
+     * @param permissionId 主键
      * @return 逻辑值
      */
-    boolean removePermissionById(Long id);
-
-    /**
-     * 根据 entity 条件，删除记录
-     *
-     * @param entity 实体条件对象
-     */
-    boolean remove(Permission entity);
-
+    boolean deletePermission(Long permissionId);
 }

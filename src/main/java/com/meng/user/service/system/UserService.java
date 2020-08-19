@@ -1,104 +1,93 @@
 package com.meng.user.service.system;
 
-import com.meng.user.repository.system.entity.User;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.meng.user.repository.system.entity.UserDO;
+import com.meng.user.service.system.entity.dto.UserDTO;
+import com.meng.user.web.system.entity.request.UserReq;
 
 import java.util.List;
 
-/**
- * 用户 服务类
- *
- * @author mengli
- * @create 2020-07-04
- */
 public interface UserService {
 
-    /**
-     * 查询总记录数
-     *
-     * @return 总记录数
-     */
-    int countUser();
+    boolean updatePassword(UserDTO userDTO);
 
     /**
-     * 查询单条记录
+     * 添加用户-角色之间关系
      *
-     * @param id 主键
-     * @return 实体
+     * @param userId 用户id
+     * @param roleIds 角色ids
      */
-    User getUserById(Long id);
+    void addCorrelationRoles(Long userId, Long... roleIds);
 
     /**
-     * 查询集合
+     * 移除用户-角色之间关系
      *
-     * @return 集合
+     * @param userId 用户id
+     * @param roleIds 角色ids
      */
-    List<User> listUsers();
+    void removeCorrelationRoles(Long userId, Long... roleIds);
 
     /**
-     * 根据 entity 条件，查询集合
+     * 用户登录判断
      *
-     * @param entity 实体条件对象
-     * @return 集合
+     * @param userReq 用户信息
      */
-    List<User> listUsers(User entity);
+    String login(UserReq userReq);
+
+    /**
+     * 查询单个用户
+     *
+     * @param userId 主键
+     * @return 用户
+     */
+    UserDTO getUser(Long userId);
+
+    /**
+     * 查询单个用户
+     *
+     * @param username 用户名
+     * @return 用户
+     */
+    UserDTO getUserByUsername(String username);
+
+    /**
+     * 查询用户集合
+     *
+     * @param page 分页对象
+     * @return 用户集合
+     */
+    List<UserDTO> listUsers(Page<UserDO> page);
 
     /**
      * 插入一条记录
      *
-     * @param entity 实体对象
+     * @param userDTO 实体对象
      * @return 逻辑值
      */
-    boolean saveUser(User entity);
+    boolean saveUser(UserDTO userDTO);
 
     /**
-     * 批量插入
+     * 主键存在则更新记录，否则插入一条记录
      *
-     * @param entityList 实体对象集合
-     * @param batchSize 插入数量
+     * @param userDTO 实体对象
+     * @return 逻辑值
      */
-    boolean saveBatch(List<User> entityList, int batchSize);
+    boolean saveOrUpdateUser(UserDTO userDTO);
 
     /**
      * 修改一条记录
      *
-     * @param entity 实体对象
+     * @param userDTO 实体对象
      * @return 逻辑值
      */
-    boolean updateUserById(User entity);
-
-    /**
-     * 根据 entity 条件，修改记录
-     *
-     * @param entity 实体条件对象
-     * @return 逻辑值
-     */
-    boolean updateUser(User entity);
-
-    /**
-     * 批量修改
-     *
-     * @param entityList 实体对象集合
-     * @param batchSize 修改数量
-     */
-    boolean updateBatch(List<User> entityList, int batchSize);
+    boolean updateUser(UserDTO userDTO);
 
     /**
      * 删除一条记录
      *
-     * @param id 主键
+     * @param userId 主键
      * @return 逻辑值
      */
-    boolean removeUserById(Long id);
-
-    /**
-     * 根据 entity 条件，删除记录
-     *
-     * @param entity 实体条件对象
-     */
-    boolean remove(User entity);
-
-    User getUserByUserame(String username);
-
-    String login(User userReq);
+    boolean deleteUser(Long userId);
 
 }
