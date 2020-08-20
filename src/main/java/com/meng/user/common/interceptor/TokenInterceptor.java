@@ -74,14 +74,14 @@ public class TokenInterceptor implements HandlerInterceptor {
 
             String username = JwtHelper.getUsername(token);
 
-            UserDTO user = userService.getUserByUsername(username);
+            UserDTO userDTO = userService.getUserByUsername(username);
 
-            if (user == null) {
+            if (userDTO == null) {
                 log.info("用户不存在，请重新登录");
                 throw new RuntimeException("用户不存在，请重新登录");
             }
 
-            boolean result = JwtHelper.verify(token, user.getPassword());
+            boolean result = JwtHelper.verify(token, userDTO.getPassword());
 
             log.info("[登录校验拦截器] 校验JWT有效性 - 返回结果:{}", result);
 
