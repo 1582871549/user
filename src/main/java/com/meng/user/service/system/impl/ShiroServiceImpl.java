@@ -40,7 +40,7 @@ public class ShiroServiceImpl {
      */
     public Map<String, String> loadFilterChainDefinitions() {
         // 权限控制map.从数据库获取
-        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
+        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("/logout", "logout");
         filterChainDefinitionMap.put("/css/**", "anon");
         filterChainDefinitionMap.put("/js/**", "anon");
