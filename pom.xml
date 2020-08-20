@@ -102,6 +102,18 @@
             </exclusions>
         </dependency>
 
+        <!-- redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <!-- redis-pool2 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+
         <!-- thymeleaf-spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -163,7 +175,6 @@
         </dependency>
 
 
-
         <!-- configuration -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -207,24 +218,20 @@
 
     <build>
         <resources>
-            <!--            <resource>-->
-            <!--                <directory>src/main/java</directory>-->
-            <!--                <includes>-->
-            <!--                    <include>**/*.yml</include>-->
-            <!--                    <include>**/*.properties</include>-->
-            <!--                    <include>**/*.xml</include>-->
-            <!--                </includes>-->
-            <!--                <filtering>false</filtering>-->
-            <!--            </resource>-->
-            <!--            <resource>-->
-            <!--                <directory>src/main/resources</directory>-->
-            <!--                <includes>-->
-            <!--                    <include>**/*.yml</include>-->
-            <!--                    <include>**/*.properties</include>-->
-            <!--                    <include>**/*.xml</include>-->
-            <!--                </includes>-->
-            <!--                <filtering>false</filtering>-->
-            <!--            </resource>-->
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.yml</include>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
         </resources>
         <plugins>
             <plugin>
