@@ -65,33 +65,35 @@ public class ShiroServiceImpl {
 
         synchronized (shiroFilterFactoryBean) {
 
-            AbstractShiroFilter shiroFilter = null;
+            AbstractShiroFilter shiroFilter;
             try {
-                shiroFilter = (AbstractShiroFilter) shiroFilterFactoryBean
-                        .getObject();
+                shiroFilter = (AbstractShiroFilter) shiroFilterFactoryBean.getObject();
             } catch (Exception e) {
                 throw new RuntimeException(
                         "get ShiroFilter from shiroFilterFactoryBean error!");
             }
 
-            PathMatchingFilterChainResolver filterChainResolver = (PathMatchingFilterChainResolver) shiroFilter
-                    .getFilterChainResolver();
-            DefaultFilterChainManager manager = (DefaultFilterChainManager) filterChainResolver
-                    .getFilterChainManager();
+            PathMatchingFilterChainResolver filterChainResolver = (PathMatchingFilterChainResolver) shiroFilter.getFilterChainResolver();
+
+            DefaultFilterChainManager manager = (DefaultFilterChainManager) filterChainResolver.getFilterChainManager();
 
             // 清空老的权限控制
             manager.getFilterChains().clear();
 
             shiroFilterFactoryBean.getFilterChainDefinitionMap().clear();
-            shiroFilterFactoryBean
-                    .setFilterChainDefinitionMap(loadFilterChainDefinitions());
+            shiroFilterFactoryBean.setFilterChainDefinitionMap(loadFilterChainDefinitions());
+
             // 重新构建生成
-            Map<String, String> chains = shiroFilterFactoryBean
-                    .getFilterChainDefinitionMap();
+            Map<String, String> chains = shiroFilterFactoryBean.getFilterChainDefinitionMap();
+
             for (Map.Entry<String, String> entry : chains.entrySet()) {
+
                 String url = entry.getKey();
-                String chainDefinition = entry.getValue().trim()
+
+                String chainDefinition = entry.getValue()
+                        .trim()
                         .replace(" ", "");
+
                 manager.createChain(url, chainDefinition);
             }
 

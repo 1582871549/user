@@ -291,7 +291,7 @@ public class ShiroConfig {
     }
 
     /**
-     * 开启shiro aop注解支持. 使用代理方式
+     * shiro 注解提供类（aop）
      *
      * @return authorizationAttributeSourceAdvisor
      */

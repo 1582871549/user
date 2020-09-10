@@ -13,9 +13,9 @@ import org.apache.shiro.authz.permission.WildcardPermission;
 import org.apache.shiro.authz.permission.WildcardPermissionResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -47,8 +47,8 @@ public class CustomRolePermissionResolver implements RolePermissionResolver {
     @Override
     public Collection<Permission> resolvePermissionsInRole(String roleName) {
 
-        List<Permission> permissions = new ArrayList<>();
         Set<String> permissionUrls = getPermissions(roleName);
+        Set<Permission> permissions = new LinkedHashSet<>(permissionUrls.size());
 
         if (permissionResolver instanceof WildcardPermissionResolver) {
             for (String permissionUrl : permissionUrls) {
