@@ -9,7 +9,7 @@
  */
 package com.meng.user.common.util;
 
-import com.meng.user.service.system.entity.dto.UserDTO;
+import com.meng.user.repository.system.entity.UserDO;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
@@ -242,11 +242,11 @@ public class ShiroUtil {
      *
      * @return ShiroUser
      */
-    public static UserDTO getUser() {
+    public static UserDO getUser() {
         if (isGuest()) {
             return null;
         } else {
-            return (UserDTO) getSubject().getPrincipals().getPrimaryPrincipal();
+            return (UserDO) getSubject().getPrincipals().getPrimaryPrincipal();
         }
     }
 

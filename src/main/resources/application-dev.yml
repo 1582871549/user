@@ -27,7 +27,6 @@ spring:
     cache: false
 
 mybatis-plus:
-  config-location: classpath:config/mybatis-config.xml
   type-aliases-package: com.meng.user.repository.system.entity
 
 logging:

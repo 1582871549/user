@@ -1,10 +1,10 @@
 package com.meng.user.shiro;
 
 import com.meng.user.common.exception.BusinessException;
+import com.meng.user.repository.system.entity.PermissionDO;
+import com.meng.user.repository.system.entity.RoleDO;
 import com.meng.user.service.system.PermissionService;
 import com.meng.user.service.system.RoleService;
-import com.meng.user.service.system.entity.dto.PermissionDTO;
-import com.meng.user.service.system.entity.dto.RoleDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.PermissionResolver;
@@ -63,15 +63,15 @@ public class CustomRolePermissionResolver implements RolePermissionResolver {
 
         Set<String> perms = new HashSet<>();
 
-        RoleDTO role = roleService.getRole(roleName);
+        RoleDO role = roleService.getRole(roleName);
 
         if (role == null) {
             throw new BusinessException();
         }
 
-        List<PermissionDTO> permissions = permissionService.listPermissions(role.getRoleId());
+        List<PermissionDO> permissions = permissionService.listPermissions(role.getRoleId());
 
-        for (PermissionDTO permission : permissions) {
+        for (PermissionDO permission : permissions) {
 
             String url = permission.getUrl();
 

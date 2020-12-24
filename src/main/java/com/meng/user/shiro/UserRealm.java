@@ -2,9 +2,9 @@ package com.meng.user.shiro;
 
 import com.meng.user.common.enums.ResultEnum;
 import com.meng.user.common.exception.BusinessException;
+import com.meng.user.repository.system.entity.UserDO;
 import com.meng.user.service.system.RoleService;
 import com.meng.user.service.system.UserService;
-import com.meng.user.service.system.entity.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -72,21 +72,21 @@ public class UserRealm extends AuthorizingRealm {
 
         // 通过username从数据库中查找 User对象，如果找到，没找到.
         // 实际项目中，这里可以根据实际情况做缓存，如果不做，Shiro自己也是有时间间隔机制，2分钟内不会重复执行该方法
-        UserDTO userDTO = userService.getUserByUsername(username);
+        UserDO userDO = userService.getUserByUsername(username);
 
         // 身份验证是否成功
-        if (userDTO == null) {
+        if (userDO == null) {
             throw new BusinessException(ResultEnum.USER_NOT_EXIST);
         }
 
-        if (userDTO.getLocked()) {
+        if (userDO.getLocked()) {
             throw new BusinessException(ResultEnum.USER_LOCKED);
         }
 
         return new SimpleAuthenticationInfo(
                 username,
-                userDTO.getPassword(),
-                ByteSource.Util.bytes(userDTO.getSalt()),
+                userDO.getPassword(),
+                ByteSource.Util.bytes(userDO.getSalt()),
                 getName()
         );
     }
@@ -133,13 +133,13 @@ public class UserRealm extends AuthorizingRealm {
             return null;
         }
 
-        UserDTO userDTO = userService.getUserByUsername(username);
+        UserDO userDO = userService.getUserByUsername(username);
 
-        if (userDTO == null) {
+        if (userDO == null) {
             return null;
         }
 
-        return userDTO.getUserId();
+        return userDO.getUserId();
     }
 
     public SimpleAuthorizationInfo setRoles(Long userId) {
